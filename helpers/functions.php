@@ -121,13 +121,12 @@ function textCleanUp(string $text)
 
 /**
  * Encodes current query string to URL-safe base64.
- *
+ * @param string $query
  * @return string
  */
-function nav_ref_encode(): string
+function nav_ref_encode(?string $query): string
 {
-    $q = Request::getQuery();
-    return $q ? rtrim(strtr(base64_encode($q), '+/', '-_'), '=') : '';
+    return $query ? rtrim(strtr(base64_encode($query), '+/', '-_'), '=') : '';
 }
 
 /**
