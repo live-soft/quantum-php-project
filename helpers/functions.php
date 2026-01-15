@@ -132,11 +132,16 @@ function nav_ref_encode(?string $query): string
 /**
  * Decodes a URL-safe base64 reference back to query string.
  *
- * @param string|null $ref
- * @return string|null
+ * @param string $ref
+ * @return string
  */
-function nav_ref_decode(?string $ref): ?string
+function nav_ref_decode(?string $ref): string
 {
-    if (!$ref) return null;
-    return base64_decode(strtr($ref, '-_', '+/')) ?: null;
+    if (!$ref) {
+        return '';
+    }
+
+    $decoded = base64_decode(strtr($ref, '-_', '+/'), true);
+
+    return ($decoded === false || $decoded === '') ? '' : $decoded;
 }
