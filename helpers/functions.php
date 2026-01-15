@@ -18,6 +18,7 @@ use Quantum\Config\Exceptions\ConfigException;
 use Quantum\Libraries\HttpClient\HttpClient;
 use Quantum\App\Exceptions\BaseException;
 use Quantum\Di\Exceptions\DiException;
+use Quantum\Http\Request;
 
 /**
  * Gets the url with selected language
@@ -116,4 +117,31 @@ function create_user_directory(string $uuid)
 function textCleanUp(string $text)
 {
     return str_replace(['"', '\'', '-'], '', $text);
+}
+
+/**
+ * Encodes current query string to URL-safe base64.
+ * @param string $query
+ * @return string
+ */
+function nav_ref_encode(?string $query): string
+{
+    return $query ? rtrim(strtr(base64_encode($query), '+/', '-_'), '=') : '';
+}
+
+/**
+ * Decodes a URL-safe base64 reference back to query string.
+ *
+ * @param string $ref
+ * @return string
+ */
+function nav_ref_decode(?string $ref): string
+{
+    if ($ref === 'my-posts') {
+        return '/my-posts';
+    }
+
+    $decoded = $ref ? base64_decode(strtr($ref, '-_', '+/'), true) : false;
+
+    return '/posts' . ($decoded ? '?' . $decoded : '');
 }
