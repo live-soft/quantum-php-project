@@ -137,11 +137,11 @@ function nav_ref_encode(?string $query): string
  */
 function nav_ref_decode(?string $ref): string
 {
-    if (!$ref) {
-        return '';
+    if ($ref === 'my-posts') {
+        return '/my-posts';
     }
 
-    $decoded = base64_decode(strtr($ref, '-_', '+/'), true);
+    $decoded = $ref ? base64_decode(strtr($ref, '-_', '+/'), true) : false;
 
-    return ($decoded === false || $decoded === '') ? '' : $decoded;
+    return '/posts' . ($decoded ? '?' . $decoded : '');
 }
